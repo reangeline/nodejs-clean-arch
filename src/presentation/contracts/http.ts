@@ -1,16 +1,33 @@
+import { ServerError } from "../errors";
+
 export type HttpResponse = {
   statusCode: number;
   body: any;
 };
 
-export const serverError = (error: Error): HttpResponse => ({
-  statusCode: 500,
-  body: error.stack,
+export const badRequest = (error: Error): HttpResponse => ({
+  statusCode: 400,
+  body: error,
 });
 
-export const ok = (body: any): HttpResponse => ({
+export const forbidden = (error: Error): HttpResponse => ({
+  statusCode: 403,
+  body: error,
+});
+
+// export const unauthorized = (): HttpResponse => ({
+//   statusCode: 401,
+//   body: new UnauthorizedError()
+// })
+
+export const serverError = (error: Error): HttpResponse => ({
+  statusCode: 500,
+  body: new ServerError(error.stack),
+});
+
+export const ok = (data: any): HttpResponse => ({
   statusCode: 200,
-  body,
+  body: data,
 });
 
 export const noContent = (): HttpResponse => ({

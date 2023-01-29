@@ -21,21 +21,17 @@ describe("Create Task", () => {
     const { sut } = makeSut();
 
     const task = await sut.execute({
-      id: "1",
       name_task: "teste",
       schedule_time_hour: 1,
       schedule_time_minute: 1,
       schedule_days: ["monday"],
     });
-
-    expect(task.id).toBe("1");
   });
 
   it("should return error if insert same id", async () => {
     const { sut } = makeSut();
 
     await sut.execute({
-      id: "1",
       name_task: "teste",
       schedule_time_hour: 1,
       schedule_time_minute: 1,
@@ -44,7 +40,6 @@ describe("Create Task", () => {
 
     expect(
       sut.execute({
-        id: "1",
         name_task: "teste",
         schedule_time_hour: 1,
         schedule_time_minute: 1,
