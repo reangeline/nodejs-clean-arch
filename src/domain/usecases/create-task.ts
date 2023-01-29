@@ -1,41 +1,40 @@
-import CreateTaskDto from "@/dtos/CreateTaskDTO";
+import { TaskInput, TaskOutput } from "@/presentation/dtos";
 import { Task } from "../entities";
-import TaskRepository from "@/domain/repositories/TaskRepository";
+import { TaskRepositoryInterface } from "@/domain/repositories/task-repository-interface";
 
 export class CreateTask {
-  private taskRepository: TaskRepository;
-  constructor(taskRepository: TaskRepository) {
+  private taskRepository: TaskRepositoryInterface;
+  constructor(taskRepository: TaskRepositoryInterface) {
     this.taskRepository = taskRepository;
   }
 
   async execute({
-    id,
     name_task,
     schedule_time_hour,
     schedule_time_minute,
     schedule_days,
-  }: CreateTaskDto): Promise<Task> {
+  }: TaskInput): Promise<TaskOutput> {
     const newTask = new Task(
-      id,
       name_task,
       schedule_time_hour,
       schedule_time_minute,
       schedule_days
     );
 
-    const isExist = await this.taskRepository.findTaskById(newTask.id);
+    if (!newTask.isDateValid(schedule_days)) throw new Error("Add a valid day");
 
-    if (isExist) {
-      throw new Error("this id already exist");
-    }
+    const isExist = await this.taskRepository.findTaskById({
+      _id: newTask._id,
+    });
+    if (isExist) throw new Error("this id already exist");
 
-    const taskSaved = await this.taskRepository.saveTask(
-      newTask.id,
-      newTask.name_task,
-      newTask.schedule_time_hour,
-      newTask.schedule_time_minute,
-      newTask.schedule_days
-    );
+    const taskSaved = await this.taskRepository.saveTask({
+      _id: newTask._id,
+      name_task: newTask.name_task,
+      schedule_time_hour: newTask.schedule_time_hour,
+      schedule_time_minute: newTask.schedule_time_minute,
+      schedule_days: newTask.schedule_days,
+    });
 
     return taskSaved;
   }

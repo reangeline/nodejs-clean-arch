@@ -1,19 +1,19 @@
-export type HttpResponse<T = any> = {
+export type HttpResponse = {
   statusCode: number;
-  data: T;
+  body: any;
 };
 
 export const serverError = (error: Error): HttpResponse => ({
   statusCode: 500,
-  data: error.stack,
+  body: error.stack,
 });
 
-export const ok = (data: any): HttpResponse => ({
+export const ok = (body: any): HttpResponse => ({
   statusCode: 200,
-  data,
+  body,
 });
 
 export const noContent = (): HttpResponse => ({
   statusCode: 204,
-  data: null,
+  body: null,
 });

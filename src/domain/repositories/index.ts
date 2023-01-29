@@ -1,1 +1,1 @@
-export * from "@/domain/repositories/TaskRepository";
+export * from "@/domain/repositories/task-repository-interface";

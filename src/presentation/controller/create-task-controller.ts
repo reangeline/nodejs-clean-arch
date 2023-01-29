@@ -1,12 +1,26 @@
 import { CreateTask } from "@/domain/usecases";
-import { Controller, HttpResponse, ok, serverError } from "../contracts";
+import {
+  Controller,
+  HttpResponse,
+  ok,
+  serverError,
+  // Validation,
+} from "../contracts";
 
 export class CreateTaskController implements Controller {
-  constructor(private readonly createTask: CreateTask) {}
+  constructor(
+    private readonly createTask: CreateTask // private readonly validation: Validation
+  ) {}
 
   async handle(request: CreateTaskController.Request): Promise<HttpResponse> {
     try {
+      // const error = this.validation.validate(request);
+      // if (error) {
+      //   return serverError(error);
+      // }
+
       const task = await this.createTask.execute(request);
+
       return ok(task);
     } catch (error) {
       return serverError(error);
@@ -16,7 +30,6 @@ export class CreateTaskController implements Controller {
 
 export namespace CreateTaskController {
   export type Request = {
-    id: string;
     name_task: string;
     schedule_time_hour: number;
     schedule_time_minute: number;
