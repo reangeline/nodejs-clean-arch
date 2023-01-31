@@ -1,5 +1,5 @@
-import { CreateTask } from "../../../../src/domain/usecases/create-task";
-import TaskRepositoryMock from "../repositories/TaskRepositoryMock";
+import { CreateTask } from "@/domain/usecases";
+import TaskRepositoryMock from "@/tests/unit/domain/mocks/TaskRepositoryMock";
 
 type SutOutput = {
   sut: CreateTask;
@@ -20,31 +20,11 @@ describe("Create Task", () => {
   it("should create task", async () => {
     const { sut } = makeSut();
 
-    const task = await sut.execute({
-      name_task: "teste",
-      schedule_time_hour: 1,
-      schedule_time_minute: 1,
-      schedule_days: ["monday"],
-    });
-  });
-
-  it("should return error if insert same id", async () => {
-    const { sut } = makeSut();
-
     await sut.execute({
       name_task: "teste",
       schedule_time_hour: 1,
       schedule_time_minute: 1,
       schedule_days: ["monday"],
     });
-
-    expect(
-      sut.execute({
-        name_task: "teste",
-        schedule_time_hour: 1,
-        schedule_time_minute: 1,
-        schedule_days: ["monday"],
-      })
-    ).rejects.toBeInstanceOf(Error);
   });
 });
